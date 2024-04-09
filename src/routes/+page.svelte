@@ -3,7 +3,7 @@
 <script>
 	import { onMount } from "svelte";
 	import { createEventDispatcher } from "svelte";
-	import Button from "./button.svelte"
+	import Button from "./button.svelte";
 	
 	let showForm = false; 
 	let email = '', password = '', fullname = '';
@@ -19,7 +19,7 @@
 		event.preventDefault();
 		
 		//Post request sent to the backend 
-		const response = await fetch('http://localhost:8080', {
+		const response = await fetch('http://localhost:5174', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
