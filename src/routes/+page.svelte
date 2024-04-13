@@ -3,7 +3,7 @@
 <script>
 	import { onMount } from "svelte";
 	import { createEventDispatcher } from "svelte";
-	import Button from "./button.svelte";
+	import Button from "./Button.svelte";
 	
 	let showForm = false; 
 	let email = '', password = '', fullname = '';
