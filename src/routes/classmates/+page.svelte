@@ -13,20 +13,19 @@
 <DataTable>
     <Head>
         <Row>
-            <Cell>ID</Cell>
-            <Cell>Email</Cell>
-            <Cell>Full Name</Cell>
+            <Cell>Name</Cell>
+            <Cell>Rating</Cell>
         </Row>
     </Head>
     <Body>
         {#each data.classmates as classmate}
             <Row>
-                <Cell>{classmate.id}</Cell>
                 <Cell>{classmate.fullname}</Cell>
-                <Cell>{classmate.email}</Cell>
+                <Cell>{#if classmate.average_rating}
+                    {classmate.average_rating}
+                {:else} no rating {/if}</Cell>
             </Row>
         {/each}
     </Body>
 </DataTable>
-
 
