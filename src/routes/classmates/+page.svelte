@@ -8,24 +8,27 @@
 </script>
 
 
-<h1> Displayed all classmates with material UI !</h1>
+<h1> CLASSMATES</h1>
 
-<DataTable>
+<DataTable style = "font-family:monospace; font-size: 1.5em;">
     <Head>
         <Row>
-            <Cell>Name</Cell>
-            <Cell>Rating</Cell>
+            <Cell style="padding-right: 50px;">Name</Cell>
+            <Cell> Rating </Cell>
         </Row>
     </Head>
     <Body>
         {#each data.classmates as classmate}
             <Row>
-                <Cell>{classmate.fullname}</Cell>
-                <Cell>{#if classmate.average_rating}
+                <Cell style="padding-right:50px;">{classmate.fullname}</Cell>
+                <Cell style = "color:blue;">  
+                    {#if classmate.average_rating}
                     {classmate.average_rating}
-                {:else} no rating {/if}</Cell>
+                    {:else} --
+                    {/if}</Cell>
             </Row>
         {/each}
     </Body>
 </DataTable>
+
 

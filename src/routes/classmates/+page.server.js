@@ -9,29 +9,27 @@ export async function load() {
     }
     
     const sql = `  
-SELECT
-	c.rowid AS id, 
-    c.fullname, 
-    avg(r.rating) AS average_rating 
-FROM
-	classmates AS c
-LEFT JOIN Ratings as r 
-ON rated_to_id = c.rowid
+    SELECT
+	    c.rowid AS id, 
+        c.fullname, 
+        round(avg(r.rating), 2) AS average_rating 
+    FROM
+	    classmates AS c
+    LEFT JOIN Ratings as r 
+    ON rated_to_id = c.rowid
 
-GROUP BY 
-	c.rowid
+    GROUP BY 
+	    c.rowid
     
-ORDER BY
-    c.fullname`
+    ORDER BY
+        c.fullname`
 	
-        
     const stmt = db.prepare(sql);
     const rows = stmt.all();
 
     console.log({rows}); 
 
-    
-    return { classmates: rows
-    };
+        
+    return { classmates: rows };
 
 }
