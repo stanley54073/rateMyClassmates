@@ -20,15 +20,13 @@
     <Body>
         {#each data.classmates as classmate}
             <Row>
-                <Cell style="padding-right:50px;">{classmate.fullname}</Cell>
+                <Cell style="padding-right:50px;"><a href="/person/{classmate.id}">{classmate.fullname}</a></Cell>
                 <Cell style = "color:blue;">  
                     {#if classmate.average_rating}
-                    {classmate.average_rating}
+                    {classmate.average_rating}/5
                     {:else} --
                     {/if}</Cell>
             </Row>
         {/each}
     </Body>
 </DataTable>
-
-

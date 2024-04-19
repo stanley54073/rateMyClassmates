@@ -12,7 +12,7 @@ export async function load() {
     SELECT
 	    c.rowid AS id, 
         c.fullname, 
-        round(avg(r.rating), 2) AS average_rating 
+        round(avg(r.rating), 1) AS average_rating 
     FROM
 	    classmates AS c
     LEFT JOIN Ratings as r 
