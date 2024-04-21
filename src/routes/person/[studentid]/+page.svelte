@@ -8,7 +8,8 @@
     <span style="font-size:2em;">{data.classmate.average_rating}</span>/5
     <br>
     <span style="font-size:2em;">{data.classmate.fullname} </span><!-- array -->
-   
+    <br>
+    *Major: {data.classmate.major}
 </h1>
 
 

@@ -12,12 +12,16 @@ export async function load() {
     SELECT
 	    c.rowid AS id, 
         c.fullname, 
+        co.coursename,
         round(avg(r.rating), 1) AS average_rating 
     FROM
 	    classmates AS c
     LEFT JOIN Ratings as r 
     ON rated_to_id = c.rowid
-
+    
+    LEFT JOIN Courses as co 
+    ON studentid = c.rowid
+    
     GROUP BY 
 	    c.rowid
     

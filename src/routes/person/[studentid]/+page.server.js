@@ -12,6 +12,7 @@ export async function load({ params }) {
 	    c.rowid AS id, 
         c.fullname, 
         c.email,
+        c.major,
         round(avg(r.rating), 1) AS average_rating 
     FROM
 	    classmates as c
