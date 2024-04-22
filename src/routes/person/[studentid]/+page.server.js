@@ -6,12 +6,15 @@ export async function load({ params }) {
     if (!db) {
         db = database_handle();
     }
-    
+    //main person info 
     const sql = `  
     SELECT
 	    c.rowid AS id, 
         c.fullname, 
         c.email,
+        c.instagram,
+        c.discord,
+        c.linkedin,
         c.major,
         round(avg(r.rating), 1) AS average_rating 
     FROM
@@ -35,6 +38,7 @@ export async function load({ params }) {
 
     console.log({people}); 
     
+    // person's ratings 
     const rsql = `  
     SELECT
 	    r.rowid AS id, 
@@ -52,7 +56,22 @@ export async function load({ params }) {
 	
     const rstmt = db.prepare(rsql);
     const reviews = rstmt.all([params.studentid]);
+    
+    // person's courses 
+    const csql = `  
+    SELECT
+        co.coursename
+    FROM
+	    courses as co
+    WHERE
+        studentid = ?
+    ORDER BY
+        co.coursename`
+	
+    const cstmt = db.prepare(csql);
+    const courses = cstmt.all([params.studentid]);
         
-    return { classmate: people[0], reviews };
+        
+    return { classmate: people[0], reviews, courses };
 
 }

@@ -14,14 +14,34 @@
 
 
 <h2>
-    Social Media: <br>
-    {data.classmate.email}
-
+    Courses: 
+    {#each data.courses as course}
+    
+    <div class="coursename">
+        {course.coursename}
+    </div>
+    
   
+   
+    
+    {/each}
     <br><br>
-    Reviews
+    --Social Media-- 
 </h2>
+<p>
+    Email: <a href="mailto:{data.classmate.email}">{data.classmate.email}</a> 
+    <br>
+    Instagram: <a href="https://www.instagram.com/{data.classmate.instagram}/" target="_blank">{data.classmate.instagram}</a>
+    <br>
+    Discord: <a href="https://www.discord.com/users/{data.classmate.discord}/" target="_blank">{data.classmate.discord}</a>
+    <br>
+    Linkedin: <a href="https://www.linkedin.com/in/{data.classmate.linkedin}/" target="_blank">{data.classmate.fullname}</a>
+    <br>
+</p>
 
+<h3>
+    Reviews
+</h3>
 
 <!-- need student comments here -->
 <!-- only post comment if id == ratedid ???-->
@@ -47,10 +67,13 @@
         display:inline-block;
         font-style: italic;
         vertical-align: top;
-        font-size:1.5em;
+        font-size:1em;
     }
     .comment {
-        font-size:1.5em;
+        font-size:1em;
+    }
+    .coursename {
+        
     }
     
 </style>
