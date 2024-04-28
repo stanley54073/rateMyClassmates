@@ -1,4 +1,5 @@
 import {database_handle} from '$lib/server/database';
+import { request } from 'http';
 
 let db;
 
@@ -43,16 +44,22 @@ export async function load({ params }) {
     SELECT
 	    r.rowid AS id, 
         r.comment,
-        r.rating
+        r.rating,
+        r.course_rated,
+        r.rated_from_id,
+        r.Date_of_Rating,
+        c.fullname AS rated_from_name
+
     FROM
 	    Ratings as r
-
+    LEFT JOIN
+        classmates AS c
+    ON
+        r.rated_from_id = c.rowid
     WHERE
-    rated_to_id = ?
-    
-    
+        rated_to_id = ?
     ORDER BY
-        r.rating`
+        r.Date_of_Rating DESC`
 	
     const rstmt = db.prepare(rsql);
     const reviews = rstmt.all([params.studentid]);
@@ -75,3 +82,10 @@ export async function load({ params }) {
     return { classmate: people[0], reviews, courses };
 
 }
+
+export const actions = {
+    default: async ({ params, request }) => {
+        const formData = await request.formData();
+        console.log(formData.get("review"))
+    }
+};

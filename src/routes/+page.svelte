@@ -9,7 +9,7 @@
 	let email = '', password = '', fullname = '';
 	const dispatcher = createEventDispatcher();
 	
-	
+
 	function openForm(){
 		showForm = !showForm;
 	}
@@ -34,13 +34,18 @@
 			console.error('user not registered')
 		}
 	}
-	
+
 onMount(() => {
 	
 	showForm = false;
 });
 </script>
 
+<nav class="login">
+	<div class="login_button">
+		<button>Login</button>
+	</div>
+</nav>
 
 
 <Button class = "primary" on:click={openForm}> <!--when click on create acc button !>-->
@@ -64,7 +69,7 @@ onMount(() => {
 
 <main>
 	<h1>RateMyClassmates</h1>
-	<p> This is a website used to find potential project partners!</p>
+	<p> This is a website used to find study buddies & project partners!</p>
 </main>
 
 <style>
@@ -99,5 +104,18 @@ onMount(() => {
 		border-radius: 10px;
 		
 	
+	}
+	
+	.login {
+		display: flex;
+		justify-content: flex-end;
+		padding: 10px;
+	}
+	.login_button button{
+		font-size: 1em;
+		font-family: 'Times New Roman', Times, serif;
+		padding: 10px;
+		border-radius: 30px;
+		background-color: lightblue;
 	}
 </style>

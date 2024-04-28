@@ -1,9 +1,56 @@
 <script>
     
+    import { onMount } from "svelte";
+    import { slide } from 'svelte/transition'
     export let data;
+    let showForm = false; 
+    let sliderval = 3;
     
+	function openForm(){
+		showForm = !showForm;
+	}
+    
+    function resetForm(){
+        sliderval = 3;
+        
+        data.classmate.course_rated = '';
+        data.classmate.Date_of_Rating = '';
+        data.classmate.comment = '';
+        showForm = false;
+    }
+	
+    onMount(() => {
+	    showForm = false;
+});
+
 </script>
-   
+
+{#if showForm}
+	<form class="form" method="POST">
+        <h1 class="header"> Rate: {data.classmate.fullname} </h1>
+        
+        <label for="course"> Course:</label> 
+        <input type="course" placeholder="CPSC 121" bind:value={data.classmate.course_rated}> 
+        
+        <label for="date"> Date:</label> 
+        <input type="date" bind:value={data.classmate.Date_of_Rating}> <br><br>
+        
+        Rate your classmate: <br>
+        <input type = "range" min="1" max="5" bind:value={sliderval}> <br>
+        Rating: {sliderval} <br><br>
+        <!-- save into data.classmate.rating-->
+        
+        <label for="review"> Write a Review: </label> <br>
+        <textarea id="review" bind:value={data.classmate.comment}></textarea>
+        
+        <button type="submit">Submit</button> 
+        <button type="reset" on:click={resetForm}>Cancel</button> 
+      
+        
+	</form>
+{/if}
+
+
 <h1>
     <span style="font-size:2em;">{data.classmate.average_rating}</span>/5
     <br>
@@ -41,13 +88,22 @@
 
 <h3>
     Reviews
+    
+    <button on:click={openForm}>
+        Rate
+    </button>
 </h3>
+
 
 <!-- need student comments here -->
 <!-- only post comment if id == ratedid ???-->
+
     
 {#each data.reviews as review}
     
+   <strong style ="margin-right:70px;">{review.course_rated} </strong>
+    {review.Date_of_Rating}
+   <br>
     <div class="rating">
         {review.rating}.0
     </div>
@@ -76,6 +132,40 @@
         
     }
     
+    button {
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        color:blue;
+        font-size:0.75em;
+        padding: 5px 10px;
+        border-radius:20px;
+        background-color: aqua;
+    }
+    .form {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%); /*center form*/
+		
+		width: 400px;
+        height: 300px;
+		padding: 50px;
+		background-color: lightblue;
+		border-radius: 10px;
+		
+	
+	}
+    .header{
+        text-align:center;
+    }
+    textarea {
+        height:60px;
+        width: 390px;
+    }
+    .date {
+        margin-left:50px;
+    }
+  
+
 </style>
 
 

@@ -5,7 +5,7 @@
     export let data;
     
     let searchterm = '';
-    
+    let yes = false;
  
     $:filteredclassmates = data.classmates.filter(
         (c)=>c.fullname.toLowerCase().includes(searchterm.toLowerCase()) 
@@ -28,9 +28,10 @@
     <Head>
         <br>
         <Row>
-            <Cell style="padding-right: 50px;">Name</Cell>
+            <Cell style="padding-right:50px;">Name</Cell>
             <Cell style="padding-right:50px;"> Rating </Cell>
-            <Cell> Shared course(s) </Cell>
+            <Cell style="padding-right:50px;"> Shared course(s) </Cell>
+            <Cell style="padding-left:50px;"> Friend </Cell>
         </Row>
     </Head>
     <Body>
@@ -44,6 +45,9 @@
                     {/if}</Cell>
                 <Cell>
                         {classmate.coursename}<br>
+                </Cell>
+                <Cell style="padding-left:50px;">
+                    <input type="checkbox" bind:checked={yes} />
                 </Cell>
             </Row>
         {/each}

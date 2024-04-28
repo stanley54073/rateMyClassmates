@@ -7,8 +7,9 @@ export async function load() {
     if (!db) {
         db = database_handle();
     }
+
     
-    const sql = `  
+    const sql = `
         SELECT 
             c.fullname,
             co.coursename,
@@ -32,7 +33,7 @@ export async function load() {
         GROUP BY 
             c.rowid, co.coursename
         ORDER BY
-            c.fullname`
+            c.fullname` 
 	
     const stmt = db.prepare(sql);
     const rows = stmt.all("2");
@@ -59,9 +60,6 @@ export async function load() {
     }
 
     console.log(summarised); 
-    
-
-
     return { classmates: summarised};
 
 }
