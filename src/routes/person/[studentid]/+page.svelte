@@ -3,6 +3,7 @@
     import { onMount } from "svelte";
     import { slide } from 'svelte/transition'
     export let data;
+    export let form; 
     let showForm = false; 
     let sliderval = 3;
     
@@ -26,30 +27,38 @@
 </script>
 
 {#if showForm}
-	<form class="form" method="POST">
+	<form class="form" method="POST" action='?/rate_someone'>
+        <input type="hidden" name="id" value={data.classmate.id}/>
+        
         <h1 class="header"> Rate: {data.classmate.fullname} </h1>
         
         <label for="course"> Course:</label> 
-        <input type="course" placeholder="CPSC 121" bind:value={data.classmate.course_rated}> 
+        <input type="course" placeholder="CPSC 121" name="course"> 
         
         <label for="date"> Date:</label> 
-        <input type="date" bind:value={data.classmate.Date_of_Rating}> <br><br>
+        <input type="date" name="date"> <br><br>
         
         Rate your classmate: <br>
-        <input type = "range" min="1" max="5" bind:value={sliderval}> <br>
+        <input type = "range" name="numeric_rating" min="1" max="5" bind:value={sliderval}> <br>
         Rating: {sliderval} <br><br>
         <!-- save into data.classmate.rating-->
         
         <label for="review"> Write a Review: </label> <br>
-        <textarea id="review" bind:value={data.classmate.comment}></textarea>
+        <textarea id="review" name="review"></textarea>
         
         <button type="submit">Submit</button> 
+        
         <button type="reset" on:click={resetForm}>Cancel</button> 
       
         
 	</form>
 {/if}
 
+{#if form && form.message}
+    <h2>
+        {form.message}
+    </h2>
+{/if}
 
 <h1>
     <span style="font-size:2em;">{data.classmate.average_rating}</span>/5

@@ -37,7 +37,7 @@ export async function load({ params }) {
     const stmt = db.prepare(sql);
     const people = stmt.all([params.studentid]);
 
-    console.log({people}); 
+    //console.log({people}); 
     
     // person's ratings 
     const rsql = `  
@@ -84,8 +84,24 @@ export async function load({ params }) {
 }
 
 export const actions = {
-    default: async ({ params, request }) => {
+    rate_someone: async ({ request }) => {
         const formData = await request.formData();
-        console.log(formData.get("review"))
-    }
+  
+        const csql = `  
+        INSERT INTO Ratings (course_rated, Date_of_Rating, rating, comment, rated_from_id, rated_to_id) 
+        VALUES (?, ?, ?, ?, ?, ?)`
+        
+        const cstmt = db.prepare(csql);
+        const courses = cstmt.run(
+            formData.get("course"),
+            formData.get("date"),
+            formData.get("numeric_rating"),
+            formData.get("review"),
+            2,
+            formData.get("id"));
+            
+        return { message:'success'}
+    },
+    
+    
 };
