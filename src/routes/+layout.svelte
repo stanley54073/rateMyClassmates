@@ -1,11 +1,19 @@
-<nav>
-	<a href="/">Home</a>
-	<a href="/classmates">Classmates</a>
-	
-</nav>
+<script>
+	import Forbidden from '$lib/Forbidden.svelte';
+	import PageHeader from '$lib/PageHeader.svelte';
+	import PageFooter from '$lib/PageFooter.svelte';
 
-<slot>
-    
-</slot>
+	export let data;
+</script>
 
+<PageHeader />
 
+<!-- <pre>{JSON.stringify(data.user_record,null,2)}</pre> -->
+{#if data.grant_access}
+	<slot />
+{:else}
+	<Forbidden />
+{/if}
+
+<PageFooter />
+{JSON.stringify(data.user_record, null, 2)}
