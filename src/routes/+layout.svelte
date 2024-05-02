@@ -17,3 +17,10 @@
 
 <PageFooter />
 <pre>{JSON.stringify(data, null, 2)}</pre>
+
+<style lang="postcss">
+	:global(body) {
+		background-color: white;
+	}
+	
+</style>

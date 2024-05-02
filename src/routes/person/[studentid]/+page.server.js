@@ -100,7 +100,7 @@ export const actions = {
             2,
             formData.get("id"));
             
-        return { message:'success'}
+        return {}
     },
     
     

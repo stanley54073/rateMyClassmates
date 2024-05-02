@@ -1,5 +1,4 @@
 import {database_handle} from '$lib/server/database';
-import { auth } from '$lib/auth';
 let db;
 
 export async function load({ parent }) {
@@ -51,9 +50,31 @@ export async function load({ parent }) {
         const cstmt = db.prepare(csql);
         const courses = cstmt.all(data.userid);
     
+        const rsql = `  
+        SELECT
+            r.rowid AS id, 
+            r.comment,
+            r.rating,
+            r.course_rated,
+            r.rated_from_id,
+            r.Date_of_Rating
     
+        FROM
+            Ratings as r
+        LEFT JOIN
+            classmates AS c
+        ON
+            r.rated_from_id = c.rowid
+        WHERE
+            rated_to_id = ?
+        ORDER BY
+            r.Date_of_Rating DESC`
         
-    return { classmate: rows[0], courses };
+        const rstmt = db.prepare(rsql);
+        const reviews = rstmt.all(data.userid);
+        
+        
+    return { classmate: rows[0], courses, reviews };
 
 }
 
@@ -64,20 +85,66 @@ export const actions = {
         }
         const formData = await request.formData();
   
-        const csql = `  
+        const sql = `  
         UPDATE
             classmates
         SET
-            major = ?
+            fullname = ?,
+            email = ?,
+            major = ?,
+            instagram = ?,
+            discord = ?,
+            linkedin = ?
         WHERE 
             rowid = ?`
         
-        const cstmt = db.prepare(csql);
-        const courses = cstmt.run(
+        const stmt = db.prepare(sql);
+        const classmates = stmt.run(
+            formData.get("name"),
+            formData.get("email"),
             formData.get("major"),
+            formData.get("insta"),
+            formData.get("disc"),
+            formData.get("linkedin"),
             formData.get("userid"));
             
+            
+            
+              // update person's courses 
+        const csql = `  
+        INSERT INTO Courses (coursename, studentid)
+        VALUES (?, ?)`
+    
+        
+        const cstmt = db.prepare(csql);
+        const courses = cstmt.run(
+            formData.get("courses"),
+            formData.get("userid")
+
+        );
+    
+            
         return { message:'success'}
+    },
+    
+    delete_course: async ({ request }) => {
+        if (!db) {
+            db = database_handle();
+        }
+        const formData = await request.formData();
+        
+        const dsql = `  
+        DELETE FROM Courses 
+        WHERE coursename = ? AND studentid = ?`
+    
+        
+        const dstmt = db.prepare(dsql);
+        const courses = dstmt.run(
+            formData.get("coursename"),
+            formData.get("userid")
+
+        );
+        return {}
     },
     
     

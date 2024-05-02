@@ -1,7 +1,6 @@
 <script>
     import { onMount } from "svelte";
     export let data;
-    export let form; 
     let showForm = false; 
     
     function openForm(){
@@ -9,7 +8,6 @@
     }
     
     function resetForm(){
-        data.classmate.major = '';
         showForm = false;
     }
 	
@@ -25,14 +23,46 @@
 
 {#if showForm}
 	<form class="form" method="POST" action='?/save_changes'>
-
-        Enter your
-        <label for="major"> major:</label> 
-        <input type="major" placeholder="computer science" name="major"> 
+        Edit your profile page... <br><br>
+        <label for="name"> Name:</label> 
+        <input type="name" placeholder="Jeon Jungkook" name="name" value={data?.classmate?.fullname}> <br>
+        
+        <label for="email"> Email:</label> 
+        <input type="email" placeholder="jungkookdoop@gmail.com" name="email" value={data?.classmate?.email}> <br>
+        
+        <label for="major"> Major:</label> 
+        <input type="major" placeholder="computer science" name="major" value={data?.classmate?.major}> <br>
+        
+    <!-- insert into courses here -->
+        <label for="courses"> Courses:</label> 
+        {#each data.courses as course}
+            <form method="POST" action = "?/delete_course">
+                <div class="coursename">
+                    {course.coursename}
+                    <input type="hidden" name="coursename" value={course.coursename}>
+                    <input type="hidden" name="userid" value={data.userid}>
+                    <button type="submit"> delete </button>
+                </div>
+               
+            </form>
+        {/each}
+        <input type="courses" placeholder="CPSC 253" name="courses"> <br>
+ 
+        
+        
+        <label for="insta"> Instagram:</label> 
+        <input type="insta" placeholder="stan.chong" name="insta" value={data?.classmate?.instagram}> <br>
+        <label for="disc"> Discord:</label> 
+        <input type="disc" placeholder="stan7912" name="disc"value={data?.classmate?.discord}> <br>
+        <label for="linkedin"> Linkedin:</label> 
+        <input type="linkedin" placeholder="stanley-chong" name="linkedin" value={data?.classmate?.linkedin}> <br>
+        
+        
+        
         <input type="hidden" name="userid" value={data.userid}>
         
         
-        <button type="submit">Submit</button> 
+        <button type="submit">Save</button> 
         <button type="reset" on:click={resetForm}>Cancel</button> 
         
 	</form>
@@ -49,27 +79,54 @@
         </button>
     </h1>
     <h2>
+    
         Name: {data.classmate.fullname}
         <br>
         Email: {data.classmate.email}
         <br>
         Major: {data.classmate.major}
         <br>
-        Courses: {data.classmate.courses}
+        Courses: 
+        {#each data.courses as course}
+            <div class="coursename">
+                {course.coursename}
+            </div>
+        {/each}
         
         <br><br>
         --Social Media-- 
         
             <br>
-            Instagram: {data.classmate.instagram}
-            <br>
-            Discord: {data.classmate.discord}
-            <br>
-            Linkedin: {data.classmate.linkedin}
-    
-    
+            Instagram: <a href="https://www.instagram.com/{data.classmate.instagram}/" target="_blank">{data.classmate.instagram}</a>
+             <br>
+            Discord: <a href="https://www.discord.com/users/{data.classmate.discord}/" target="_blank">{data.classmate.discord}</a>
+             <br>
+            Linkedin: <a href="https://www.linkedin.com/in/{data.classmate.linkedin}/" target="_blank">{data.classmate.linkedin}</a>
+        
+        <br><br>
+        My overall rating: {data.classmate.average_rating}/5 <br>
+            My Reviews:
        
     </h2>
+    
+    
+            {#each data.reviews as review}
+                
+            <strong style ="margin-right:70px;">{review.course_rated} </strong>
+            {review.Date_of_Rating}
+            <br>
+            <div class="rating">
+                {review.rating}.0
+            </div>
+            
+            <div class="comment">
+                {review.comment}
+            </div>
+            <br>
+            
+            {/each}
+
+
 </main>
 
 

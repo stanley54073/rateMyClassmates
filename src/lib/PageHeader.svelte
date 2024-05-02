@@ -14,8 +14,14 @@
 				|
 				<img class="profile_pic" src={$auth.photoURL} alt="Profile Picture" />
 			{/if}
+			
+			<div class="tabs">
+				<a href="/">Home</a> |
+				<a href="/classmates">Classmates</a> |
+				<a href="/myprofile">My profile</a>
+			</div>
+		
 		</nav>
-		<h1>Firebase !</h1>
 	</header>
 </main>
 
@@ -27,5 +33,11 @@
 	.profile_pic {
 		width: 50px;
 		height: 50px;
+	}
+	.tabs {
+		display: flex;
+		gap: 10px;
+		margin-top: 2em;
+
 	}
 </style>

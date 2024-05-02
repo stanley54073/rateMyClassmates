@@ -91,7 +91,7 @@
     <br>
     Discord: <a href="https://www.discord.com/users/{data.classmate.discord}/" target="_blank">{data.classmate.discord}</a>
     <br>
-    Linkedin: <a href="https://www.linkedin.com/in/{data.classmate.linkedin}/" target="_blank">{data.classmate.fullname}</a>
+    Linkedin: <a href="https://www.linkedin.com/in/{data.classmate.linkedin}/" target="_blank">{data.classmate.linkedin}</a>
     <br>
 </p>
 
@@ -137,9 +137,7 @@
     .comment {
         font-size:1em;
     }
-    .coursename {
-        
-    }
+  
     
     button {
         font-family: Georgia, 'Times New Roman', Times, serif;
@@ -170,10 +168,7 @@
         height:60px;
         width: 390px;
     }
-    .date {
-        margin-left:50px;
-    }
-  
+
 
 </style>
 

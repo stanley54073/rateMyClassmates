@@ -69,6 +69,7 @@ function createAuth() {
 		// deletes the one we got because we now use a server session cookie
 		auth.currentUser.getIdToken(true);
 		invalidateAll();
+		location.reload();
 	}
 
 	async function sign_out() {
@@ -85,6 +86,7 @@ function createAuth() {
 			}
 		})
 		invalidateAll();
+		location.reload();
 	}
 
 	return {
