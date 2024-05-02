@@ -1,6 +1,8 @@
 <main>
 <hr />
 <a href="/">Home</a>
+<a href="/classmates">Classmates</a>
+<a href="/myprofile">My profile</a>
 </main>
 
 <style>

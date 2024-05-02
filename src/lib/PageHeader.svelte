@@ -15,7 +15,7 @@
 				<img class="profile_pic" src={$auth.photoURL} alt="Profile Picture" />
 			{/if}
 		</nav>
-		<h1>Firebase for Fun and Profit</h1>
+		<h1>Firebase !</h1>
 	</header>
 </main>
 

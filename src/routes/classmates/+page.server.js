@@ -1,9 +1,9 @@
 
 import {database_handle} from '$lib/server/database';
-
 let db;
 
-export async function load() {
+export async function load({ parent }) {
+    const data = await parent();
     if (!db) {
         db = database_handle();
     }
@@ -36,7 +36,7 @@ export async function load() {
             c.fullname` 
 	
     const stmt = db.prepare(sql);
-    const rows = stmt.all("2");
+    const rows = stmt.all(parseInt(data.userid));
     
 
     let summarised = [];
