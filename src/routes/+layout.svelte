@@ -1,7 +1,6 @@
 <script>
 	import Forbidden from '$lib/Forbidden.svelte';
 	import PageHeader from '$lib/PageHeader.svelte';
-	import PageFooter from '$lib/PageFooter.svelte';
 
 	export let data;
 </script>
@@ -15,8 +14,8 @@
 	<Forbidden />
 {/if}
 
-<PageFooter />
-<pre>{JSON.stringify(data, null, 2)}</pre>
+
+<!-- <pre>{JSON.stringify(data, null, 2)}</pre> -->
 
 <style lang="postcss">
 	:global(body) {

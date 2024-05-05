@@ -1,5 +1,5 @@
 // cribbed from https://www.captaincodeman.com/lazy-loading-firebase-with-sveltekit
-import { invalidateAll } from '$app/navigation';
+import { goto, invalidateAll } from '$app/navigation';
 import { readable } from 'svelte/store';
 import { browser } from '$app/environment';
 
@@ -69,7 +69,7 @@ function createAuth() {
 		// deletes the one we got because we now use a server session cookie
 		auth.currentUser.getIdToken(true);
 		invalidateAll();
-		location.reload();
+
 	}
 
 	async function sign_out() {
@@ -86,7 +86,15 @@ function createAuth() {
 			}
 		})
 		invalidateAll();
-		location.reload();
+		
+		if (browser) {
+			setTimeout(function() {
+				window.location = '/';
+			}, 5);
+		
+			// put inside a set timeout call
+		}
+		
 	}
 
 	return {

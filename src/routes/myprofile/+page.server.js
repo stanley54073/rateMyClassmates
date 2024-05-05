@@ -3,6 +3,7 @@ let db;
 
 export async function load({ parent }) {
     const data = await parent();
+    console.log("in load", { data });
     if (!db) {
         db = database_handle();
     }
