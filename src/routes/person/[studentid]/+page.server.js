@@ -109,24 +109,28 @@ export const actions = {
         const formData = await request.formData();
         const userid = formData.get("userid");
         const classmateid = formData.get("classmateid");
+        const date = formData.get("date");
         
         const alreadyFriends = await checkIfFriends(userid, classmateid);
+        const requestAlreadySent = await checkRequestSent(userid, classmateid);
         
         //if not already friends, send friend request 
-        if(!alreadyFriends) {
+        if(!alreadyFriends && !requestAlreadySent) {
             const fsql = `  
-            INSERT INTO friend_request (from_id, to_id)
-            VALUES (?, ?)`
+            INSERT INTO friend_request (from_id, to_id, as_of)
+            VALUES (?, ?, ?)`
             
             const fstmt = db.prepare(fsql);
             const friends = fstmt.run(
-                userid, classmateid
+                userid, classmateid, date
     
             );
         }
         
+        console.log("alreadyfriends:", alreadyFriends);
+        console.log("request already sent:", requestAlreadySent);
        
-        return { alreadyFriends };
+        return { alreadyFriends, requestAlreadySent};
     },
     
 };
@@ -140,6 +144,25 @@ async function checkIfFriends(userid, classmateid) {
    
     WHERE (person1_id = ? AND person2_id = ?)
     OR (person2_id = ? AND person1_id = ?)`
+    
+    const stmt = db.prepare(sql);
+    const result = stmt.get(
+        userid, classmateid, userid, classmateid
+    );
+    
+    return result.count > 0;
+}
+
+//true if count > 0 bc that means friend request already sent by either 
+async function checkRequestSent(userid, classmateid) {
+    const sql = `
+    SELECT 
+    COUNT(*) AS count
+    
+    FROM friend_request
+   
+    WHERE (from_id = ? AND to_id = ?)
+    OR (to_id = ? AND from_id = ?)`
     
     const stmt = db.prepare(sql);
     const result = stmt.get(

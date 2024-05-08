@@ -12,7 +12,8 @@ export async function load({ parent }) {
     SELECT
 	    c.rowid AS id, 
         c.fullname,
-        f.from_id
+        f.from_id,
+        f.as_of AS date
     FROM
 	    classmates AS c
     LEFT JOIN
@@ -38,7 +39,8 @@ export async function load({ parent }) {
         if (row.fullname !== lastname){
             summarised.push({
                 fullname: row.fullname,
-                from_id: row.from_id
+                from_id: row.from_id,
+                date: row.date
             });
            
             lastname = row.fullname;

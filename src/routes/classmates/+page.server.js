@@ -38,7 +38,6 @@ export async function load({ parent }) {
     const stmt = db.prepare(sql);
     const rows = stmt.all(parseInt(data.userid));
     
-
     let summarised = [];
     let lastname = '';
     

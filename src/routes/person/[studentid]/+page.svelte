@@ -5,6 +5,7 @@
     export let form; 
     let showForm = false; 
     let sliderval = 3;
+    let currDate = new Date(); 
     
 	function openForm(){
 		showForm = !showForm;
@@ -20,11 +21,16 @@
     }
     
     function addFriend(){
-        alert("Friend request sent !! :)");
+        // if already friends and request already sent, alert request already sent
+        
+        //else alert friend request sent
+            alert("Friend request sent !! :)");  
     }
     
 	
     onMount(() => {
+        document.getElementById("date").value = currDate.toDateString();
+    
 	    showForm = false;
 });
 
@@ -74,11 +80,11 @@
             <span style="font-size:2em;">{data.classmate.fullname} </span> 
             <input type="hidden" name="userid" value={data.userid}/>
             <input type="hidden" name="classmateid" value={data.classmate.id}/>
+            <input type="hidden" id="date" name="date" value={currDate} />
             <button on:click={addFriend} type="submit" style="font-size: 0.5em;"> Add Friend </button>
 
         </form>
     <br>
-    
     
     *Major: {data.classmate.major}
 </h1>

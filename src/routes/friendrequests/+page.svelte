@@ -11,9 +11,7 @@
   
     {#if data && data.classmate &&data.classmate.length > 0}
         {#each data.classmate as classmate}
-       
-                {classmate.fullname} sent you a friend request ! 
-
+                <strong>{classmate.fullname}</strong> sent you a friend request ! --> {classmate.date} 
             <div class="buttons">
                 <form method="POST" action = "?/accept">
                         <input type="hidden" name="from_id" value={classmate.from_id}>
