@@ -24,8 +24,9 @@
 {#if showForm}
 	<form class="form" method="POST" action='?/save_changes'>
         Edit your profile page... <br><br>
-        <label for="name"> Name:</label> 
+        <label for="name"> Display Name:</label> 
         <input type="name" placeholder="Jeon Jungkook" name="name" value={data?.classmate?.fullname}> <br>
+
         
         <label for="email"> Email:</label> 
         <input type="email" placeholder="jungkookdoop@gmail.com" name="email" value={data?.classmate?.email}> <br>
@@ -80,7 +81,7 @@
     </h1>
     <h2>
     
-        Name: {data.classmate.fullname}
+        Display Name: {data.classmate.fullname}
         <br>
         Email: {data.classmate.email}
         <br>
@@ -93,7 +94,8 @@
             </div>
         {/each}
         
-        <br><br>
+     
+        <br>
         --Social Media-- 
         
             <br>
@@ -120,7 +122,7 @@
             </div>
             
             <div class="comment">
-                {review.comment}
+                {review.comment} 
             </div>
             <br>
             

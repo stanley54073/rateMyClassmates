@@ -90,7 +90,7 @@ function createAuth() {
 		if (browser) {
 			setTimeout(function() {
 				window.location = '/';
-			}, 5);
+			}, 25);
 		
 			// put inside a set timeout call
 		}

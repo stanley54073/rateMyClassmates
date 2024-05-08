@@ -1,5 +1,4 @@
 import {database_handle} from '$lib/server/database';
-import { request } from 'http';
 
 let db;
 
@@ -103,5 +102,49 @@ export const actions = {
         return {}
     },
     
+    add_friend: async ({ request }) => {
+        if (!db) {
+            db = database_handle();
+        }
+        const formData = await request.formData();
+        const userid = formData.get("userid");
+        const classmateid = formData.get("classmateid");
+        
+        const alreadyFriends = await checkIfFriends(userid, classmateid);
+        
+        //if not already friends, send friend request 
+        if(!alreadyFriends) {
+            const fsql = `  
+            INSERT INTO friend_request (from_id, to_id)
+            VALUES (?, ?)`
+            
+            const fstmt = db.prepare(fsql);
+            const friends = fstmt.run(
+                userid, classmateid
+    
+            );
+        }
+        
+       
+        return { alreadyFriends };
+    },
     
 };
+//true if count > 0 bc that means already friends 
+async function checkIfFriends(userid, classmateid) {
+    const sql = `
+    SELECT 
+    COUNT(*) AS count
+    
+    FROM friends
+   
+    WHERE (person1_id = ? AND person2_id = ?)
+    OR (person2_id = ? AND person1_id = ?)`
+    
+    const stmt = db.prepare(sql);
+    const result = stmt.get(
+        userid, classmateid, userid, classmateid
+    );
+    
+    return result.count > 0;
+}

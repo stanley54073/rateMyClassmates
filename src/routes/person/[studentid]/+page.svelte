@@ -1,7 +1,6 @@
 <script>
     
     import { onMount } from "svelte";
-    import { slide } from 'svelte/transition'
     export let data;
     export let form; 
     let showForm = false; 
@@ -19,6 +18,11 @@
         data.classmate.comment = '';
         showForm = false;
     }
+    
+    function addFriend(){
+        alert("Friend request sent !! :)");
+    }
+    
 	
     onMount(() => {
 	    showForm = false;
@@ -63,8 +67,19 @@
 <h1>
     <span style="font-size:2em;">{data.classmate.average_rating}</span>/5
     <br>
-    <span style="font-size:2em;">{data.classmate.fullname} </span><!-- array -->
+    
+    
+    <!-- FRIEND REQUEST -->
+        <form method="POST" action='?/add_friend'>
+            <span style="font-size:2em;">{data.classmate.fullname} </span> 
+            <input type="hidden" name="userid" value={data.userid}/>
+            <input type="hidden" name="classmateid" value={data.classmate.id}/>
+            <button on:click={addFriend} type="submit" style="font-size: 0.5em;"> Add Friend </button>
+
+        </form>
     <br>
+    
+    
     *Major: {data.classmate.major}
 </h1>
 
@@ -118,7 +133,7 @@
     </div>
     
     <div class="comment">
-        {review.comment}
+        {review.comment} 
     </div>
     <br>
     

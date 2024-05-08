@@ -1,8 +1,7 @@
 <script>
 
 </script>
-	
-	
+
 
 <main>
 	<h1>RateMyClassmates</h1>
@@ -29,6 +28,5 @@
 			max-width: none;
 		}
 	}
-
 
 </style>

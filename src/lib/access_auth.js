@@ -18,6 +18,7 @@ const path_to_role_map = new Map([
 	[new RegExp(/^[/]admin([/]|$)/), SUPERUSER_ROLE],
 	[new RegExp(/^[/]classmates([/]|$)/), 'user'],
 	[new RegExp(/^[/]myprofile([/]|$)/), 'user'],
+	[new RegExp(/^[/]friendrequests([/]|$)/), 'user'],
 	[new RegExp(/^[/]useradmin([/]|$)/), 'useradmin']
 ]);
 
