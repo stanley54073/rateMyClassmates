@@ -47,7 +47,13 @@
                         {classmate.coursename}<br>
                 </Cell>
                 <Cell style="padding-left:50px;">
-                    <input type="checkbox" bind:checked={yes} />
+                    <div class="check">
+                    {#if classmate.friendstatus}
+                        <input type="checkbox" class="checkbox" checked disabled>
+                    {:else}
+                        <input type="checkbox" class="checkbox" disabled>
+                    {/if}
+                </div>
                 </Cell>
             </Row>
         {/each}
@@ -55,3 +61,14 @@
 </DataTable>
 
 
+<style>
+    .check{
+      display:flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .checkbox:checked {
+ 
+        filter: brightness(0.1);
+    }
+</style>

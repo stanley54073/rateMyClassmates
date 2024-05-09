@@ -42,6 +42,8 @@ export async function load({ parent }) {
     let lastname = '';
     
     for(const row of rows){
+        const alreadyFriends = await checkIfFriends(data.userid, row.id);
+        
         if (row.fullname === lastname){
             summarised[summarised.length - 1].coursename += ', ' + row.coursename;
         }
@@ -50,7 +52,8 @@ export async function load({ parent }) {
                 fullname: row.fullname,
                 id:row.id,
                 average_rating: row.average_rating,
-                coursename: row.coursename 
+                coursename: row.coursename,
+                friendstatus: alreadyFriends
             });
            
             lastname = row.fullname;
@@ -63,4 +66,21 @@ export async function load({ parent }) {
 
 }
 
+async function checkIfFriends(userid, classmateid) {
+    const sql = `
+    SELECT 
+    COUNT(*) AS count
+    
+    FROM friends
+   
+    WHERE (person1_id = ? AND person2_id = ?)
+    OR (person2_id = ? AND person1_id = ?)`
+    
+    const stmt = db.prepare(sql);
+    const result = stmt.get(
+        userid, classmateid, userid, classmateid
+    );
+    
+    return result.count > 0;
+}
    

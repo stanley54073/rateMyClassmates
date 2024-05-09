@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     export let data;
     let showForm = false; 
+    let valid = true; 
     
     function openForm(){
         showForm = !showForm;
@@ -10,26 +11,33 @@
     function resetForm(){
         showForm = false;
     }
-	
+    
+    function validateEmail(){
+        //email validation
+        const regex = /\S+@\S+\.\S+/;
+        valid = regex.test(data.classmate.email);
+    }
     
     onMount(() => {
 	    showForm = false;
     });
-    
     
 
 </script>
 
 
 {#if showForm}
-	<form class="form" method="POST" action='?/save_changes'>
+	<form class="form" method="POST" action='?/save_changes' onsubmit="return validateForm()">
         Edit your profile page... <br><br>
         <label for="name"> Display Name:</label> 
-        <input type="name" placeholder="Jeon Jungkook" name="name" value={data?.classmate?.fullname}> <br>
+        <input type="name" placeholder="Jeon Jungkook" name="name" value={data?.classmate?.fullname} required> <br>
 
         
         <label for="email"> Email:</label> 
-        <input type="email" placeholder="jungkookdoop@gmail.com" name="email" value={data?.classmate?.email}> <br>
+        <input type="email" placeholder="jungkookdoop@gmail.com" name="email" value={data?.classmate?.email} on:input{validateEmail}> <br>
+        {#if !valid}
+            <p> invalid email... </p>
+        {/if}
         
         <label for="major"> Major:</label> 
         <input type="major" placeholder="computer science" name="major" value={data?.classmate?.major}> <br>
@@ -140,7 +148,7 @@
 		transform: translate(-50%, -50%); /*center form*/
 		
 		width: 400px;
-        height: 300px;
+        height: 350px;
 		padding: 50px;
 		background-color: lightblue;
 		border-radius: 10px;

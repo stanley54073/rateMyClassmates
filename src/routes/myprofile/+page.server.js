@@ -111,18 +111,21 @@ export const actions = {
             
             
             
-              // update person's courses 
-        const csql = `  
-        INSERT INTO Courses (coursename, studentid)
-        VALUES (?, ?)`
-    
-        
-        const cstmt = db.prepare(csql);
-        const courses = cstmt.run(
-            formData.get("courses"),
-            formData.get("userid")
-
-        );
+              // update person's courses -- only send courses if not blank input
+        const courseFormData = formData.getAll("courses").filter(course => course.trim() !== "");
+            if(courseFormData.length > 0) {
+                const csql = `  
+                INSERT INTO Courses (coursename, studentid)
+                VALUES (?, ?)`
+            
+                
+                const cstmt = db.prepare(csql);
+                for(const course of courseFormData) {
+                    cstmt.run(
+                        course,
+                        formData.get("userid"));
+                }
+            }
     
             
         return { message:'success'}

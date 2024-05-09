@@ -43,10 +43,10 @@
         <h1 class="header"> Rate: {data.classmate.fullname} </h1>
         
         <label for="course"> Course:</label> 
-        <input type="course" placeholder="CPSC 121" name="course"> 
+        <input type="course" placeholder="CPSC 121" name="course" required> 
         
         <label for="date"> Date:</label> 
-        <input type="date" name="date"> <br><br>
+        <input type="date" name="date" required> <br><br>
         
         Rate your classmate: <br>
         <input type = "range" name="numeric_rating" min="1" max="5" bind:value={sliderval}> <br>
@@ -54,7 +54,7 @@
         <!-- save into data.classmate.rating-->
         
         <label for="review"> Write a Review: </label> <br>
-        <textarea id="review" name="review"></textarea>
+        <textarea id="review" name="review" required></textarea>
         
         <button type="submit">Submit</button> 
         
