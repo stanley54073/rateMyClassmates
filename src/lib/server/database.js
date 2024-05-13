@@ -1,13 +1,13 @@
-import Database from 'better-sqlite3';
+import postgres from 'postgres';
 
-import {DB_FILE} from '$env/static/private';
+import {PGCONNECT} from '$env/static/private';
 
-let database;
+const sql = postgres(PGCONNECT, { 
+    username: 'stanley',
+    host: 'localhost',
+    database: 'classmates',
+    port: 5432, 
+});
 
-export function database_handle() {
-  if (!database) {
-    console.log("opening db: " + DB_FILE);
-    database = new Database(DB_FILE, { fileMustExist: true, verbose: console.log });
-  }
-  return database;
-}
+export default sql;
+

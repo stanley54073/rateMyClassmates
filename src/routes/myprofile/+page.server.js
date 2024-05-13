@@ -1,78 +1,66 @@
-import {database_handle} from '$lib/server/database';
-let db;
+import sql from '$lib/server/database';
 
 export async function load({ parent }) {
     const data = await parent();
     console.log("in load", { data });
-    if (!db) {
-        db = database_handle();
-    }
     
-    const sql = `  
+    const rows = await sql`  
     SELECT
-	    c.rowid AS id, 
+	    c.id AS id, 
         c.fullname, 
         c.email,
         c.major,
         c.instagram,
         c.discord,
         c.linkedin,
-        round(avg(r.rating), 2) AS average_rating 
+        round(avg(r.rating)::numeric, 2) AS average_rating 
     FROM
 	    classmates AS c
     LEFT JOIN Ratings as r 
-    ON rated_to_id = c.rowid
+    ON rated_to_id = c.id
 
     WHERE 
-        c.rowid = ?
+        c.id = ${data.userid}
         
     GROUP BY 
-	    c.rowid
+	    c.id
     
     ORDER BY
         c.fullname`
-	
-    const stmt = db.prepare(sql);
-    const rows = stmt.all(data.userid);
 
-    console.log({rows}); 
+
     
         // person's courses 
-        const csql = `  
+        const courses = await sql`  
         SELECT
             co.coursename
         FROM
             courses as co
         WHERE
-            studentid = ?
+            studentid = ${data.userid}
         ORDER BY
             co.coursename`
         
-        const cstmt = db.prepare(csql);
-        const courses = cstmt.all(data.userid);
     
-        const rsql = `  
+        const reviews = await sql`  
         SELECT
-            r.rowid AS id, 
+            r.id AS id, 
             r.comment,
             r.rating,
             r.course_rated,
             r.rated_from_id,
-            r.Date_of_Rating
+            r."Date_of_Rating"
     
         FROM
             Ratings as r
         LEFT JOIN
             classmates AS c
         ON
-            r.rated_from_id = c.rowid
+            r.rated_from_id = c.id
         WHERE
-            rated_to_id = ?
+            rated_to_id = ${data.userid}
         ORDER BY
-            r.Date_of_Rating DESC`
-        
-        const rstmt = db.prepare(rsql);
-        const reviews = rstmt.all(data.userid);
+            r."Date_of_Rating" DESC`
         
         
     return { classmate: rows[0], courses, reviews };
@@ -81,49 +69,38 @@ export async function load({ parent }) {
 
 export const actions = {
     save_changes: async ({ request }) => {
-        if (!db) {
-            db = database_handle();
-        }
         const formData = await request.formData();
+        const name = formData.get("name");
+        const email = formData.get("email");
+        const major = formData.get("major");
+        const insta = formData.get("insta");
+        const disc = formData.get("disc");
+        const linkedin = formData.get("linkedin");
+        const userid = formData.get("userid");
   
-        const sql = `  
+        const classmates = await sql`  
         UPDATE
             classmates
         SET
-            fullname = ?,
-            email = ?,
-            major = ?,
-            instagram = ?,
-            discord = ?,
-            linkedin = ?
+            fullname = ${name},
+            email = ${email},
+            major = ${major},
+            instagram = ${insta},
+            discord = ${disc},
+            linkedin = ${linkedin}
         WHERE 
-            rowid = ?`
+            id = ${userid}`
         
-        const stmt = db.prepare(sql);
-        const classmates = stmt.run(
-            formData.get("name"),
-            formData.get("email"),
-            formData.get("major"),
-            formData.get("insta"),
-            formData.get("disc"),
-            formData.get("linkedin"),
-            formData.get("userid"));
-            
             
             
               // update person's courses -- only send courses if not blank input
         const courseFormData = formData.getAll("courses").filter(course => course.trim() !== "");
             if(courseFormData.length > 0) {
-                const csql = `  
-                INSERT INTO Courses (coursename, studentid)
-                VALUES (?, ?)`
-            
-                
-                const cstmt = db.prepare(csql);
                 for(const course of courseFormData) {
-                    cstmt.run(
-                        course,
-                        formData.get("userid"));
+                    const csql = await sql`  
+                    INSERT INTO Courses (coursename, studentid)
+                    VALUES (${course}, ${userid})`
+     
                 }
             }
     
@@ -132,22 +109,15 @@ export const actions = {
     },
     
     delete_course: async ({ request }) => {
-        if (!db) {
-            db = database_handle();
-        }
         const formData = await request.formData();
+        const coursename = formData.get("coursename");
+        const userid =  formData.get("userid");
         
         const dsql = `  
         DELETE FROM Courses 
-        WHERE coursename = ? AND studentid = ?`
+        WHERE coursename = ${coursename} AND studentid = ${userid}`
     
-        
-        const dstmt = db.prepare(dsql);
-        const courses = dstmt.run(
-            formData.get("coursename"),
-            formData.get("userid")
-
-        );
+      
         return {}
     },
     

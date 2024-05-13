@@ -1,47 +1,40 @@
 
-import {database_handle} from '$lib/server/database';
-let db;
+import sql from '$lib/server/database';
 
 export async function load({ parent }) {
     const data = await parent();
-    if (!db) {
-        db = database_handle();
-    }
-
     
-    const sql = `
+    const classmates = await sql`
         SELECT 
             c.fullname,
             co.coursename,
-            c.rowid AS id, 
-            round(avg(r.rating), 1) AS average_rating 
+            c.id AS id, 
+            round(avg(r.rating)::numeric, 1) AS average_rating 
         FROM
             courses AS co,
             courses AS my_course,
             classmates AS c
         LEFT JOIN Ratings as r 
-            ON rated_to_id = c.rowid
+            ON rated_to_id = c.id
         WHERE
-            co.studentid = c.rowid
+            co.studentid = c.id
         AND
             co.coursename = my_course.coursename
         AND
-            my_course.studentid = ?
+            my_course.studentid = ${data.userid}
         AND 
             co.studentid <> my_course.studentid
             
         GROUP BY 
-            c.rowid, co.coursename
+            c.id, co.coursename
         ORDER BY
             c.fullname` 
 	
-    const stmt = db.prepare(sql);
-    const rows = stmt.all(parseInt(data.userid));
-    
+       //parseint data.userid ???
     let summarised = [];
     let lastname = '';
     
-    for(const row of rows){
+    for(const row of classmates){
         const alreadyFriends = await checkIfFriends(data.userid, row.id);
         
         if (row.fullname === lastname){
@@ -67,20 +60,16 @@ export async function load({ parent }) {
 }
 
 async function checkIfFriends(userid, classmateid) {
-    const sql = `
+    const result = await sql`
     SELECT 
     COUNT(*) AS count
     
     FROM friends
    
-    WHERE (person1_id = ? AND person2_id = ?)
-    OR (person2_id = ? AND person1_id = ?)`
+    WHERE (person1_id = ${userid} AND person2_id = ${classmateid})
+    OR (person2_id = ${userid} AND person1_id = ${classmateid})`
+
     
-    const stmt = db.prepare(sql);
-    const result = stmt.get(
-        userid, classmateid, userid, classmateid
-    );
-    
-    return result.count > 0;
+    return result[0].count > 0;
 }
    

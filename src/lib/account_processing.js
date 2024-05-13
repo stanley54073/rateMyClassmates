@@ -1,11 +1,10 @@
-
+import sql from '$lib/server/database';
 import { serverAuth } from '$lib/firebase-server';
 
 // SUPERUSER_ROLE: this role name has access to ALL routes
 import { SUPERUSER_ROLE, NEW_USER_ROLE } from '$env/static/private';
 
-import {database_handle} from '$lib/server/database';
-let db;
+
 
 export const user_logged_in = async (claims) => {
 
@@ -29,22 +28,21 @@ export const user_logged_in = async (claims) => {
     // assign a application-specific user id
     // SAMPLE CODE ACCESSING A DATABASE
     // vvvvvvvvv
-    if (!db) {
-        db = database_handle();
-    }
-    const sql = `
+  
+    const user_count_sql = await sql`
     INSERT INTO
         classmates (email, fullname, major)
     VALUES
-        (?, ?, ?)`;
+        (${claims.email}, ${claims.name}, 'not specified')`;
 
-    const stmt = db.prepare(sql);
-    const result = stmt.run( claims.email, claims.name, "not specified");
-    const newUserId = stmt.lastInsertRowid;
-    const user_count_sql = `SELECT COUNT(*) as user_count FROM classmates`;
-    const user_count_stmt = db.prepare(user_count_sql);
-    const user_count = user_count_stmt.get()['user_count'];
-    const first_user = user_count == 1;
+    const newUserId = user_count_sql[0].id; 
+    //application_user.id
+    
+    const user_count_stmt = await sql
+    `SELECT COUNT(*) as user_count 
+    FROM classmates`;
+    
+    const first_user = user_count_stmt[0].user_count == 1;
     console.log({result, newUserId, user_count, first_user});
     // ^^^^^^^^^
 
@@ -60,6 +58,7 @@ export const user_logged_in = async (claims) => {
         delete claimsToSet[cant_set_these];
     }
     claimsToSet['application_userid'] = newUserId;
+  
     console.log("after delete", {claimsToSet})
 
     // all new users get this role
