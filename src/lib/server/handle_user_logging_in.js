@@ -64,7 +64,7 @@ export const handle_user_logging_in = async (claims) => {
     const newUserId = test_user_validitycount[0].id;
     console.log(newUserId);
         
-    if (test_user_validitycount.changes !== 1) {
+    if (newUserId === null) {
         console.error("Error creating user record for ",{claims});
         return;
     }
@@ -75,7 +75,7 @@ export const handle_user_logging_in = async (claims) => {
     const first_user = user_count_sql[0].user_count == 1;
     
     
-    console.log({user_count, first_user, newUserId});
+    console.log({user_count:user_count_sql[0].user_count, first_user, newUserId});
 
     // ^^^^^^^^^
 

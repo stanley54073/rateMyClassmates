@@ -13,7 +13,7 @@ export async function load({ parent }) {
         c.instagram,
         c.discord,
         c.linkedin,
-        round(avg(r.rating)::numeric, 2) AS average_rating 
+        round(avg(r.rating)::numeric, 1) AS average_rating 
     FROM
 	    classmates AS c
     LEFT JOIN Ratings as r 
@@ -49,7 +49,7 @@ export async function load({ parent }) {
             r.rating,
             r.course_rated,
             r.rated_from_id,
-            r."Date_of_Rating"
+            r.date_of_rating
     
         FROM
             Ratings as r
@@ -60,7 +60,7 @@ export async function load({ parent }) {
         WHERE
             rated_to_id = ${data.userid}
         ORDER BY
-            r."Date_of_Rating" DESC`
+            r.date_of_rating DESC`
         
         
     return { classmate: rows[0], courses, reviews };
@@ -113,7 +113,7 @@ export const actions = {
         const coursename = formData.get("coursename");
         const userid =  formData.get("userid");
         
-        const dsql = `  
+        const dsql = await sql `  
         DELETE FROM Courses 
         WHERE coursename = ${coursename} AND studentid = ${userid}`
     

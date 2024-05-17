@@ -123,7 +123,7 @@
             {#each data.reviews as review}
                 
             <strong style ="margin-right:70px;">{review.course_rated} </strong>
-            {review.Date_of_Rating}
+            {review.date_of_rating}
             <br>
             <div class="rating">
                 {review.rating}.0

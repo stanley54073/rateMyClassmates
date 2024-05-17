@@ -4,7 +4,7 @@ export async function load({ params }) {
     //main person info 
     const people = await sql`  
     SELECT
-	    c.id AS id, 
+	    c.id AS classmate_id, 
         c.fullname, 
         c.email,
         c.instagram,
@@ -20,9 +20,10 @@ export async function load({ params }) {
     
 
     WHERE
-    id = ${[params.studentid]}
+    c.id = ${[params.studentid]}
     
     GROUP BY
+        c.id,
         rated_to_id
     
     ORDER BY
@@ -34,12 +35,12 @@ export async function load({ params }) {
     // person's ratings 
     const reviews = await sql `  
     SELECT
-	    r.id AS id, 
+	    r.id AS review_id, 
         r.comment,
         r.rating,
         r.course_rated,
         r.rated_from_id,
-        r.Date_of_Rating,
+        r.date_of_rating,
         c.fullname AS rated_from_name
 
     FROM
@@ -51,11 +52,11 @@ export async function load({ params }) {
     WHERE
         rated_to_id = ${[params.studentid]}
     ORDER BY
-        r.Date_of_Rating DESC`
+        r.date_of_rating DESC`
 
     
     // person's courses 
-    const courses = `  
+    const courses = await sql `  
     SELECT
         co.coursename
     FROM
@@ -81,7 +82,7 @@ export const actions = {
         const ratedto_id = formData.get("id");
   
         const courses = await sql`  
-        INSERT INTO Ratings (course_rated, Date_of_Rating, rating, comment, rated_from_id, rated_to_id) 
+        INSERT INTO Ratings (course_rated, date_of_rating, rating, comment, rated_from_id, rated_to_id) 
         VALUES (${course}, ${date}, ${numeric_rating}, ${review}, ${ratedfrom_id}, ${ratedto_id})`
             
         return {}
@@ -128,7 +129,7 @@ async function checkIfFriends(userid, classmateid) {
 
 //true if count > 0 bc that means friend request already sent by either 
 async function checkRequestSent(userid, classmateid) {
-    const result = `
+    const result = await sql`
     SELECT 
     COUNT(*) AS count
     
