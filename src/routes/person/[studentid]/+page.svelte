@@ -15,7 +15,7 @@
         sliderval = 3;
         
         data.classmate.course_rated = '';
-        data.classmate.Date_of_Rating = '';
+        data.classmate.date_of_rating = '';
         data.classmate.comment = '';
         showForm = false;
     }
@@ -38,7 +38,7 @@
 
 {#if showForm}
 	<form class="form" method="POST" action='?/rate_someone'>
-        <input type="hidden" name="id" value={data.classmate.id}/>
+        <input type="hidden" name="id" value={data.classmate.classmate_id}/>
         
         <h1 class="header"> Rate: {data.classmate.fullname} </h1>
         
@@ -79,7 +79,7 @@
         <form method="POST" action='?/add_friend'>
             <span style="font-size:2em;">{data.classmate.fullname} </span> 
             <input type="hidden" name="userid" value={data.userid}/>
-            <input type="hidden" name="classmateid" value={data.classmate.id}/>
+            <input type="hidden" name="classmateid" value={data.classmate.classmate_id}/>
             <input type="hidden" id="date" name="date" value={currDate} />
             <button on:click={addFriend} type="submit" style="font-size: 0.5em;"> Add Friend </button>
 
@@ -132,7 +132,7 @@
 {#each data.reviews as review}
     
    <strong style ="margin-right:70px;">{review.course_rated} </strong>
-    {review.Date_of_Rating}
+    {review.date_of_rating}
    <br>
     <div class="rating">
         {review.rating}.0

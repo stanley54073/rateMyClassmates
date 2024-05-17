@@ -1,19 +1,16 @@
-import {database_handle} from '$lib/server/database';
 
+import sql from './database.js';
 import { serverAuth } from '$lib/server/firebaseServerApp';
 
 // SUPERUSER_ROLE: this role name has access to ALL routes
 import { SUPERUSER_ROLE, NEW_USER_ROLE } from '$env/static/private';
 
-let db;
+
 
 export const handle_user_logging_in = async (claims) => {
 
-    if (!db) {
-        db = database_handle();
-    }
 
-    // if the user is already assigned a (valdi) application-specific
+    // if the user is already assigned a (valid) application-specific
     // user id, we're done.
     // FIXME: should check if this name/email already exists in the database?
 	if (claims.application_userid) {
@@ -25,11 +22,12 @@ export const handle_user_logging_in = async (claims) => {
         // YOU MUST CONFIGURE: table names, column names.
         // vvvvvvvvv
 
-        const test_user_validity =
-        `SELECT COUNT(*) as is_valid FROM classmates WHERE rowid = ?`;
-        const test_user_validity_stmt = db.prepare(test_user_validity);
-        const test_user_validitycount = test_user_validity_stmt.get(claims.application_userid)['is_valid'];
-        const user_is_valid = test_user_validitycount == 1;
+
+        const test_user_validitycount = await sql`
+        SELECT COUNT(*) as is_valid 
+        FROM classmates 
+        WHERE id = ${claims.application_userid}`;
+        const user_is_valid = test_user_validitycount[0].is_valid == 1;
 
         if (user_is_valid) {
             return;
@@ -54,27 +52,30 @@ export const handle_user_logging_in = async (claims) => {
 
     // YOU MUST CONFIGURE: table names, column names.
     // vvvvvvvvv
-
-    const sql = `
+    const test_user_validitycount = await sql`
     INSERT INTO
-        classmates (email, fullname, major)
+    classmates (email, fullname, major)
     VALUES
-        (?, ?, ?)`;
+    (${claims.email}, ${claims.name}, 'not declared' )
+    RETURNING id`;
+  
 
-    const stmt = db.prepare(sql);
-    const info = stmt.run( claims.email, claims.name, "not declared");
-    const newUserId = info.lastInsertRowid;
-
-    if (info.changes !== 1) {
+    
+    const newUserId = test_user_validitycount[0].id;
+    console.log(newUserId);
+        
+    if (newUserId === null) {
         console.error("Error creating user record for ",{claims});
         return;
     }
 
-    const user_count_sql = `SELECT COUNT(*) as user_count FROM classmates`;
-    const user_count_stmt = db.prepare(user_count_sql);
-    const user_count = user_count_stmt.get()['user_count'];
-    const first_user = user_count == 1;
-    console.log({user_count, first_user, newUserId});
+    const user_count_sql = await sql
+    `SELECT COUNT(*) as user_count 
+    FROM classmates`;
+    const first_user = user_count_sql[0].user_count == 1;
+    
+    
+    console.log({user_count:user_count_sql[0].user_count, first_user, newUserId});
 
     // ^^^^^^^^^
 
