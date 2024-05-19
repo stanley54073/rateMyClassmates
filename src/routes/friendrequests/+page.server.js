@@ -28,7 +28,7 @@ export async function load({ parent }) {
     let lastname = '';
     
     // prevent duplicates 
-    for(const row of f_requests){
+    for(const row of f_requests.rows){
         if (row.fullname !== lastname){
             summarised.push({
                 fullname: row.fullname,
