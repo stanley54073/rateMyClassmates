@@ -1,6 +1,6 @@
 
-//import sql from '$lib/server/database';
-import { sql } from '@vercel/postgres';
+import sql from '$lib/server/database';
+//import { sql } from '@vercel/postgres';
 
 export async function load({ parent }) {
     const data = await parent();
@@ -35,7 +35,7 @@ export async function load({ parent }) {
     let summarised = [];
     let lastname = '';
     
-    for(const row of classmates.rows){
+    for(const row of classmates){
         const alreadyFriends = await checkIfFriends(data.userid, row.id);
         
         if (row.fullname === lastname){

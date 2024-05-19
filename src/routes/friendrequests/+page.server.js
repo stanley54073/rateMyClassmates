@@ -1,5 +1,5 @@
-//import sql from '$lib/server/database';
-import { sql } from '@vercel/postgres';
+import sql from '$lib/server/database';
+//import { sql } from '@vercel/postgres';
 
 export async function load({ parent }) {
     const data = await parent();
@@ -28,7 +28,7 @@ export async function load({ parent }) {
     let lastname = '';
     
     // prevent duplicates 
-    for(const row of f_requests.rows){
+    for(const row of f_requests){
         if (row.fullname !== lastname){
             summarised.push({
                 fullname: row.fullname,
