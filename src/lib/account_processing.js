@@ -1,4 +1,5 @@
 import sql from '$lib/server/database';
+import { sql } from '@vercel/postgres';
 import { serverAuth } from '$lib/firebase-server';
 
 // SUPERUSER_ROLE: this role name has access to ALL routes

@@ -25,6 +25,7 @@
 	"type": "module",
 	"dependencies": {
 		"@smui/data-table": "^7.0.0-beta.18",
+		"@vercel/postgres": "^0.8.0",
 		"firebase": "^10.10.0",
 		"firebase-admin": "^12.0.0",
 		"pg": "^8.11.5",
