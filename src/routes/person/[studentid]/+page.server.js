@@ -1,5 +1,5 @@
-import sql from '$lib/server/database';
-//import { sql } from '@vercel/postgres';
+
+import { sql } from '@vercel/postgres';
 
 export async function load({ params }) {
     //main person info 
