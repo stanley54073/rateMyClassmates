@@ -1,5 +1,5 @@
 
-import sql from './database.js';
+//import sql from './database.js';
 import { sql } from '@vercel/postgres';
 import { serverAuth } from '$lib/server/firebaseServerApp';
 

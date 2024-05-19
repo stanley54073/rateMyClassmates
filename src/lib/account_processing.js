@@ -1,4 +1,4 @@
-import sql from '$lib/server/database';
+//import sql from '$lib/server/database';
 import { sql } from '@vercel/postgres';
 import { serverAuth } from '$lib/firebase-server';
 
