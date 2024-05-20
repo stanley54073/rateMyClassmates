@@ -5,7 +5,7 @@ export async function load({ parent }) {
     const data = await parent();
     console.log("in load", { data });
     
-    const rows = await sql`  
+    const classmateRows = await sql`  
     SELECT
 	    c.id AS id, 
         c.fullname, 
@@ -29,10 +29,10 @@ export async function load({ parent }) {
     ORDER BY
         c.fullname`
 
-
+const classmate = classmateRows[0];
     
         // person's courses 
-        const courses = await sql`  
+        const courseRows = await sql`  
         SELECT
             co.coursename
         FROM
@@ -42,8 +42,9 @@ export async function load({ parent }) {
         ORDER BY
             co.coursename`
         
+            const courses = courseRows.map(row => row.coursename);
     
-        const reviews = await sql`  
+        const reviewsRows = await sql`  
         SELECT
             r.id AS id, 
             r.comment,
@@ -63,8 +64,17 @@ export async function load({ parent }) {
         ORDER BY
             r.date_of_rating DESC`
         
+            
+            const reviews = reviewsRows.map(row => ({
+                id: row.id,
+                comment: row.comment,
+                rating: row.rating,
+                course_rated: row.course_rated,
+                rated_from_id: row.rated_from_id,
+                date_of_rating: row.date_of_rating
+            }));
         
-    return { classmate: rows[0], courses, reviews };
+    return { classmate, courses, reviews };
 
 }
 
