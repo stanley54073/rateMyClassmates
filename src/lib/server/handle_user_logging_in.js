@@ -19,10 +19,6 @@ export const handle_user_logging_in = async (claims) => {
 
         console.log(`Testing for presence of app user id ${claims.application_userid} in database.`);
 
-        // YOU MUST CONFIGURE: table names, column names.
-        // vvvvvvvvv
-
-
         const test_user_validitycount = await sql`
         SELECT COUNT(*) as is_valid 
         FROM classmates 
@@ -59,12 +55,12 @@ export const handle_user_logging_in = async (claims) => {
     (${claims.email}, ${claims.name}, 'not declared' )
     RETURNING id`;
   
-
+    console.log(test_user_validitycount);
     
-    const newUserId = test_user_validitycount[0].id;
+    const newUserId = test_user_validitycount[0]?.id;
     console.log(newUserId);
         
-    if (newUserId === null) {
+    if (!newUserId) {
         console.error("Error creating user record for ",{claims});
         return;
     }
@@ -72,6 +68,7 @@ export const handle_user_logging_in = async (claims) => {
     const user_count_sql = await sql
     `SELECT COUNT(*) as user_count 
     FROM classmates`;
+    
     const first_user = user_count_sql[0].user_count == 1;
     
     
