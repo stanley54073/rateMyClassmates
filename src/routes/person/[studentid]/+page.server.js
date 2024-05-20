@@ -21,7 +21,7 @@ export async function load({ params }) {
     
 
     WHERE
-    c.id = ${[params.studentid]}
+    c.id = ${params.studentid}
     
     GROUP BY
         c.id,
