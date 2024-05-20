@@ -27,7 +27,7 @@ export const handle_user_logging_in = async (claims) => {
         SELECT COUNT(*) as is_valid 
         FROM classmates 
         WHERE id = ${claims.application_userid}`;
-        const user_is_valid = test_user_validitycount[0].is_valid == 1;
+        const user_is_valid = test_user_validitycount[0]?.is_valid == 1;
 
         if (user_is_valid) {
             return;
