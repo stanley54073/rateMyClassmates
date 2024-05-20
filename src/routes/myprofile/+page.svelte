@@ -88,8 +88,9 @@
         </button>
     </h1>
     <h2>
-    
+    {#if data && data.classmate}
         Display Name: {data.classmate.fullname}
+    {/if}
         <br>
         Email: {data.classmate.email}
         <br>
