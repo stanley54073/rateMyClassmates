@@ -61,7 +61,7 @@ export const handle_user_logging_in = async (claims) => {
     console.log("test if this shows up lol:", test_user_validitycount.rows[0].id);
     //shows up ? 
     
-    const newUserId = test_user_validitycount[0]?.id;
+    const newUserId = test_user_validitycount.rows[0]?.id;
     console.log("new user id:", newUserId);
         
     if (!newUserId) {
