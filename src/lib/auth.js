@@ -88,9 +88,11 @@ function createAuth() {
 		invalidateAll();
 		
 		if (browser) {
-			setTimeout(function() {
+		/*	setTimeout(function() {
 				window.location = '/';
-			}, 25);
+			}, 25);*/
+			
+			goto('/');
 		
 			// put inside a set timeout call
 		}
