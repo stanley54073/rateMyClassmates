@@ -2,6 +2,8 @@
 import { sql } from '@vercel/postgres';
 
 export async function load({ params }) {
+    
+    const studentID = parseInt(params.studentid);
     //main person info 
     const people = await sql`  
     SELECT
@@ -21,7 +23,7 @@ export async function load({ params }) {
     
 
     WHERE
-    c.id = ${params.studentid}
+    c.id = ${studentID}
     
     GROUP BY
         c.id,
@@ -51,7 +53,7 @@ export async function load({ params }) {
     ON
         r.rated_from_id = c.id
     WHERE
-        rated_to_id = ${[params.studentid]}
+        rated_to_id = ${studentID}
     ORDER BY
         r.date_of_rating DESC`
 
@@ -64,7 +66,7 @@ export async function load({ params }) {
     FROM
 	    courses as co
     WHERE
-        studentid = ${[params.studentid]}
+        studentid = ${studentID}
     ORDER BY
         co.coursename`
         
