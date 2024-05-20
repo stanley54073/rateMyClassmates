@@ -29,7 +29,7 @@ export async function load({ parent }) {
     ORDER BY
         c.fullname`
 
-const classmate = classmateRows[0];
+const classmate = classmateRows.rows[0];
     
         // person's courses 
         const courseRows = await sql`  
@@ -42,7 +42,7 @@ const classmate = classmateRows[0];
         ORDER BY
             co.coursename`
         
-            const courses = courseRows.map(row => row.coursename);
+    const courses = courseRows.rows;
     
         const reviewsRows = await sql`  
         SELECT
@@ -65,14 +65,7 @@ const classmate = classmateRows[0];
             r.date_of_rating DESC`
         
             
-            const reviews = reviewsRows.map(row => ({
-                id: row.id,
-                comment: row.comment,
-                rating: row.rating,
-                course_rated: row.course_rated,
-                rated_from_id: row.rated_from_id,
-                date_of_rating: row.date_of_rating
-            }));
+            const reviews = reviewsRows.rows;
         
     return { classmate, courses, reviews };
 
