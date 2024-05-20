@@ -35,7 +35,7 @@ export async function load({ parent }) {
     let summarised = [];
     let lastname = '';
     
-    for(const row of classmates){
+    for(const row of classmates.rows){
         const alreadyFriends = await checkIfFriends(data.userid, row.id);
         
         if (row.fullname === lastname){
