@@ -49,6 +49,7 @@ export const handle_user_logging_in = async (claims) => {
     // YOU MUST CONFIGURE: table names, column names.
     // vvvvvvvvv
     console.log("inserting new user record into classmates table", { email: claims.email, fullname: claims.name });
+    //good, shows details
     const test_user_validitycount = await sql`
     INSERT INTO
     classmates (email, fullname, major)
@@ -57,9 +58,11 @@ export const handle_user_logging_in = async (claims) => {
     RETURNING id`;
   
     console.log("test user validity insert result:", test_user_validitycount);
+    console.log("test if this shows up lol:", test_user_validitycount[0].id)
+    //shows up ? 
     
     const newUserId = test_user_validitycount[0]?.id;
-    console.log("new user id", newUserId);
+    console.log("new user id:", newUserId);
         
     if (!newUserId) {
         console.error("Error creating user record for ",{claims, test_user_validitycount});
