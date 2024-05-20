@@ -69,16 +69,15 @@ export const handle_user_logging_in = async (claims) => {
         return;
     }
     
-    console.log("new user id", newUserId);
 
     const user_count_sql = await sql
     `SELECT COUNT(*) as user_count 
     FROM classmates`;
     
-    const first_user = user_count_sql[0].user_count == 1;
+    const first_user = user_count_sql.rows[0].user_count == 1;
     
     
-    console.log({user_count:user_count_sql[0].user_count, first_user, newUserId});
+    console.log({user_count:user_count_sql.rows[0].user_count, first_user, newUserId});
 
     // ^^^^^^^^^
 
