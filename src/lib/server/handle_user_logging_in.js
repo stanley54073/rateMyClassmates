@@ -35,7 +35,7 @@ export const handle_user_logging_in = async (claims) => {
 
     //console.log("handle_user_logging_in",{claims})
     const uid = claims['uid'];
-
+   
     // A new (never been seen before) user has signed in.
     // We need to choose an application-relevant user is for them,
     // and probably assign basic roles.
@@ -48,6 +48,7 @@ export const handle_user_logging_in = async (claims) => {
 
     // YOU MUST CONFIGURE: table names, column names.
     // vvvvvvvvv
+    console.log("inserting new user record into classmates table", { email: claims.email, fullname: claims.name });
     const test_user_validitycount = await sql`
     INSERT INTO
     classmates (email, fullname, major)
@@ -55,15 +56,17 @@ export const handle_user_logging_in = async (claims) => {
     (${claims.email}, ${claims.name}, 'not declared' )
     RETURNING id`;
   
-    console.log(test_user_validitycount);
+    console.log("test user validity insert result:", test_user_validitycount);
     
     const newUserId = test_user_validitycount[0]?.id;
-    console.log(newUserId);
+    console.log("new user id", newUserId);
         
     if (!newUserId) {
-        console.error("Error creating user record for ",{claims});
+        console.error("Error creating user record for ",{claims, test_user_validitycount});
         return;
     }
+    
+    console.log("new user id", newUserId);
 
     const user_count_sql = await sql
     `SELECT COUNT(*) as user_count 
