@@ -90,7 +90,6 @@
     <h2>
     {#if data && data.classmate}
         Display Name: {data.classmate.fullname}
-    {/if}
         <br>
         Email: {data.classmate.email}
         <br>
@@ -117,6 +116,8 @@
         <br><br>
         My overall rating: {data.classmate.average_rating}/5 <br>
             My Reviews:
+            
+    {/if}
        
     </h2>
     
