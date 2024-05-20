@@ -30,11 +30,11 @@ export async function load({ params }) {
     ORDER BY
         c.fullname`
 	
-
+    const classmate = people.rows[0];
     //console.log({people}); 
     
     // person's ratings 
-    const reviews = await sql `  
+    const reviewsRows = await sql `  
     SELECT
 	    r.id AS review_id, 
         r.comment,
@@ -55,9 +55,10 @@ export async function load({ params }) {
     ORDER BY
         r.date_of_rating DESC`
 
+        const reviews = reviewsRows.rows;
     
     // person's courses 
-    const courses = await sql `  
+    const coursesRows = await sql `  
     SELECT
         co.coursename
     FROM
@@ -66,9 +67,12 @@ export async function load({ params }) {
         studentid = ${[params.studentid]}
     ORDER BY
         co.coursename`
+        
+
+    const courses = coursesRows.rows;
 	        
         
-    return { classmate: people[0], reviews, courses };
+    return { classmate, reviews, courses };
 
 }
 
@@ -125,7 +129,7 @@ async function checkIfFriends(userid, classmateid) {
     WHERE (person1_id = ${userid} AND person2_id = ${classmateid})
     OR (person2_id = ${userid} AND person1_id = ${classmateid})`
     
-    return result[0].count > 0;
+    return result.rows[0].count > 0;
 }
 
 //true if count > 0 bc that means friend request already sent by either 
@@ -140,5 +144,5 @@ async function checkRequestSent(userid, classmateid) {
     OR (to_id = ${userid} AND from_id = ${classmateid})`
     
     
-    return result[0].count > 0;
+    return result.rows[0].count > 0;
 }

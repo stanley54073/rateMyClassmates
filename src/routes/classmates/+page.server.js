@@ -71,6 +71,6 @@ async function checkIfFriends(userid, classmateid) {
     OR (person2_id = ${userid} AND person1_id = ${classmateid})`
 
     
-    return result[0].count > 0;
+    return result.rows[0].count > 0;
 }
    
