@@ -121,7 +121,7 @@
        
     </h2>
     
-    
+    {#if data.reviews}
             {#each data.reviews as review}
                 
             <strong style ="margin-right:70px;">{review.course_rated} </strong>
@@ -137,6 +137,9 @@
             <br>
             
             {/each}
+    {:else}
+        <p> No reviews currently. </p>
+    {/if}
 
 
 </main>
